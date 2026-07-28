@@ -1,0 +1,41 @@
+<iframe src="data:text/html;charset=utf-8,
+%3C!DOCTYPE%20html%3E
+%3Chtml%20lang%3D%22ru%22%3E
+%3Chead%3E
+    %3Cmeta%20charset%3D%22UTF-8%22%3E
+    %3Cstyle%3E
+        body%20%7B%20margin%3A%200%3B%20height%3A%20100vh%3B%20overflow%3A%20hidden%3B%20background%3A%20transparent%3B%20%7D
+        .star%20%7B%20position%3A%20absolute%3B%20pointer-events%3A%20none%3B%20background%3A%20radial-gradient(circle%2C%20%23fff%200%25%2C%20%2338bdf8%2050%25%2C%20transparent%20100%25)%3B%20border-radius%3A%2050%25%3B%20animation%3A%20fadeOut%200.8s%20linear%20forwards%3B%20%7D
+        %40keyframes%20fadeOut%20%7B
+            0%25%20%7B%20transform%3A%20scale(1)%20translate(0%2C%200)%3B%20opacity%3A%201%3B%20%7D
+            100%25%20%7B%20transform%3A%20scale(0.2)%20translate(var(--tx)%2C%20var(--ty))%3B%20opacity%3A%200%3B%20%7D
+        %7D
+    %3C/style%3E
+%3C/head%3E
+%3Cbody%3E
+    %3Cscript%3E
+        document.addEventListener('mousemove%2C%20function(e)%20%7B
+            if%20(Math.random()%20%3C%200.3)%20%7B
+                createStar(e.clientX%2C%20e.clientY)%3B
+            %7D
+        %7D)%3B
+        function%20createStar(x%2C%20y)%20%7B
+            const%20star%20%3D%20document.createElement('div')%3B
+            star.classList.add('star')%3B
+            const%20size%20%3D%20Math.random()%20*%2010%20+%208%3B
+            star.style.width%20%3D%20%60%24%7Bsize%7Dpx%60%3B
+            star.style.height%20%3D%20%60%24%7Bsize%7Dpx%60%3B
+            star.style.left%20%3D%20%60%24%7Bx%20-%20size%20%2F%202%7Dpx%60%3B
+            star.style.top%20%3D%20%60%24%7By%20-%20size%20%2F%202%7Dpx%60%3B
+            const%20tx%20%3D%20(Math.random()%20-%200.5)%20*%2060%3B
+            const%20ty%20%3D%20(Math.random()%20-%200.5)%20*%2060%3B
+            star.style.setProperty('--tx%2C%20%60%24%7Btx%7Dpx%60)%3B
+            star.style.setProperty('--ty%2C%20%60%24%7Bfty%7Dpx%60)%3B
+            document.body.appendChild(star)%3B
+            setTimeout(()%20%3D%3E%20star.remove()%2C%20800)%3B
+        %7D
+    %3C/script%3E
+%3C/body%3E
+%3C/html%3E" 
+style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; pointer-events: none; z-index: 9999;">
+</iframe>
