@@ -1,51 +1,55 @@
-<div id="star-cursor-container" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999999; overflow: hidden;"></div>
-
 <style>
+    /* Стиль для насыщенных золотых звёзд */
     .star-particle {
-        position: absolute;
+        position: fixed;
         pointer-events: none;
-        width: 12px;
-        height: 12px;
-        background: radial-gradient(circle, #ffffff 0%, #38bdf8 60%, transparent 100%);
-        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        /* Насыщенный золотой цвет: от ярко-жёлтого центра к глубокому янтарному краю */
+        background: radial-gradient(circle, #ffee55 0%, #ffcc00 45%, #e69500 85%, transparent 100%);
+        clip-path: polygon(50% 0%, 61% 35%, 100% 50%, 61% 65%, 50% 100%, 39% 65%, 0% 50%, 39% 35%);
         transform: translate(-50%, -50%);
         mix-blend-mode: screen;
-        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        z-index: 99999999;
+        transition: opacity 0.7s ease-out, transform 0.7s ease-out;
     }
 </style>
 
 <script>
     (function() {
-        const container = document.getElementById('star-cursor-container');
+        if (window._starCursorInitialized) return;
+        window._starCursorInitialized = true;
+
         const particles = [];
-        const maxParticles = 15;
+        const maxParticles = 30; // Длинный и красивый шлейф
+        let currentIndex = 0;
 
         for (let i = 0; i < maxParticles; i++) {
             const star = document.createElement('div');
             star.classList.add('star-particle');
             star.style.opacity = '0';
-            container.appendChild(star);
-            particles.push({ element: star, x: 0, y: 0 });
+            document.body.appendChild(star);
+            particles.push(star);
         }
 
-        let currentIndex = 0;
-
-        // Отслеживание движения мыши по всему окну браузера
         window.addEventListener('mousemove', (e) => {
-            const p = particles[currentIndex];
-            p.x = e.clientX;
-            p.y = e.clientY;
-            p.element.style.left = `${p.x}px`;
-            p.element.style.top = `${p.y}px`;
-            p.element.style.opacity = '1';
+            const star = particles[currentIndex];
             
-            const scale = Math.random() * 0.6 + 0.7;
-            p.element.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            star.style.transition = 'none';
+            star.style.opacity = '1';
+            
+            star.style.left = `${e.clientX}px`;
+            star.style.top = `${e.clientY}px`;
+            
+            const rotation = Math.random() * 360;
+            const scale = Math.random() * 0.4 + 0.9;
+            star.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale})`;
 
-            setTimeout(() => {
-                p.element.style.opacity = '0';
-                p.element.style.transform = `translate(-50%, -50%) scale(0.1)`;
-            }, 250);
+            requestAnimationFrame(() => {
+                star.style.transition = 'opacity 0.7s ease-out, transform 0.7s ease-out';
+                star.style.opacity = '0';
+                star.style.transform = `translate(-50%, -50%) rotate(${rotation + 60}deg) scale(0.2)`;
+            });
 
             currentIndex = (currentIndex + 1) % maxParticles;
         });
