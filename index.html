@@ -1,65 +1,47 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Звёздный след за курсором</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            background-color: #0f172a;
-            overflow: hidden;
-        }
+<div id="star-cursor-container" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999999; overflow: hidden;"></div>
 
-        .star-particle {
-            position: fixed;
-            pointer-events: none;
-            width: 12px;
-            height: 12px;
-            background: radial-gradient(circle, #ffffff 0%, #38bdf8 60%, transparent 100%);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            mix-blend-mode: screen;
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-        }
-    </style>
-</head>
-<body>
+<style>
+    .star-particle {
+        position: absolute;
+        pointer-events: none;
+        width: 12px;
+        height: 12px;
+        background: radial-gradient(circle, #ffffff 0%, #38bdf8 60%, transparent 100%);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: screen;
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    }
+</style>
 
-    <script>
+<script>
+    (function() {
+        const container = document.getElementById('star-cursor-container');
         const particles = [];
-        const maxParticles = 15; // Максимальное количество звезд в хвосте
+        const maxParticles = 15;
 
-        // Создаем элементы заранее для максимальной производительности
         for (let i = 0; i < maxParticles; i++) {
             const star = document.createElement('div');
             star.classList.add('star-particle');
             star.style.opacity = '0';
-            document.body.appendChild(star);
+            container.appendChild(star);
             particles.push({ element: star, x: 0, y: 0 });
         }
 
         let currentIndex = 0;
-        let lastX = 0;
-        let lastY = 0;
 
-        document.addEventListener('mousemove', (e) => {
-            lastX = e.clientX;
-            lastY = e.clientY;
-
-            // Активируем очередную звездочку при движении мыши
+        // Отслеживание движения мыши по всему окну браузера
+        window.addEventListener('mousemove', (e) => {
             const p = particles[currentIndex];
-            p.x = lastX;
-            p.y = lastY;
+            p.x = e.clientX;
+            p.y = e.clientY;
             p.element.style.left = `${p.x}px`;
             p.element.style.top = `${p.y}px`;
             p.element.style.opacity = '1';
             
-            // Случайный размер для каждой новой искры
             const scale = Math.random() * 0.6 + 0.7;
             p.element.style.transform = `translate(-50%, -50%) scale(${scale})`;
 
-            // Плавное исчезновение через мгновение
             setTimeout(() => {
                 p.element.style.opacity = '0';
                 p.element.style.transform = `translate(-50%, -50%) scale(0.1)`;
@@ -67,7 +49,5 @@
 
             currentIndex = (currentIndex + 1) % maxParticles;
         });
-    </script>
-
-</body>
-</html>
+    })();
+</script>
